@@ -1,7 +1,7 @@
 package com.app.chat.infrastructure.rest;
 
 
-import com.app.chat.application.service.ChatRoomServiceImpl;
+import com.app.chat.application.service.ChatRoomUseCaseImpl;
 import com.app.chat.domain.model.ChatRoom;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +11,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/chatrooms")
 public class ChatRoomController {
-    private final ChatRoomServiceImpl service;
+    private final ChatRoomUseCaseImpl service;
 
-    public ChatRoomController(ChatRoomServiceImpl service) {
+    public ChatRoomController(ChatRoomUseCaseImpl service) {
         this.service = service;
     }
     @PostMapping

@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ChatRoomServiceImpl implements CreateChatRoomUseCase, GetAllChatRoomsUseCase, GetChatRoomByIdUseCase {
+public class ChatRoomUseCaseImpl implements CreateChatRoomUseCase, GetAllChatRoomsUseCase, GetChatRoomByIdUseCase {
 
     private final ChatRoomRepository chatRoomRepository;
 
-    public ChatRoomServiceImpl(ChatRoomRepository chatRoomRepository) {
+    public ChatRoomUseCaseImpl(ChatRoomRepository chatRoomRepository) {
         this.chatRoomRepository = chatRoomRepository;
     }
 
@@ -26,12 +26,12 @@ public class ChatRoomServiceImpl implements CreateChatRoomUseCase, GetAllChatRoo
     }
 
     @Override
-    public List<ChatRoom> findAll() {
+    public List<ChatRoom> getAll() {
         return chatRoomRepository.getAll();
     }
 
     @Override
-    public Optional<ChatRoom> findById(Long id) {
+    public Optional<ChatRoom> getById(Long id) {
         Optional<ChatRoom> chatRoom = chatRoomRepository.getById(id);
         return chatRoom;
     }

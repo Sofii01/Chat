@@ -8,9 +8,9 @@ public class Message {
     private final String sender;
     private final String content;
     private final LocalDateTime timestamp;
-    private final UUID chatRoomId;
+    private final Long chatRoomId;
 
-    public Message(UUID id, String sender, String content, LocalDateTime timestamp, UUID chatRoomId) {
+    public Message(UUID id, String sender, String content, LocalDateTime timestamp, Long chatRoomId) {
         if(sender == null || sender.isBlank()) throw new IllegalArgumentException("Sender is required");
         if(content == null || content.isBlank()) throw new IllegalArgumentException("Content is required");
         this.id = id != null ? id : UUID.randomUUID();
@@ -20,7 +20,7 @@ public class Message {
         this.chatRoomId = chatRoomId;
     }
     // Metodo de logica simple
-    public static Message create(UUID chatRoomId, String sender, String content) {
+    public static Message create(Long chatRoomId, String sender, String content) {
         if (chatRoomId == null) {
             throw new IllegalArgumentException("ChatRoom ID cannot be null");
         }
@@ -54,7 +54,7 @@ public class Message {
         return content;
     }
 
-    public UUID getChatRoomId() {
+    public Long getChatRoomId() {
         return chatRoomId;
     }
 }
