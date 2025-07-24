@@ -1,8 +1,11 @@
 package com.app.chat.infrastructure.persistence.adapter;
 
+import com.app.chat.domain.model.ChatRoom;
 import com.app.chat.domain.model.Message;
 import com.app.chat.domain.port.output.MessageRepository;
+import com.app.chat.infrastructure.dtos.MessageResponseDto;
 import com.app.chat.infrastructure.persistence.entity.MessageJpaEntity;
+import com.app.chat.infrastructure.persistence.mapper.MessageMapper;
 import com.app.chat.infrastructure.persistence.repository.ChatRoomJpaRepository;
 import com.app.chat.infrastructure.persistence.repository.MessageJpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,14 +19,16 @@ import java.util.stream.Collectors;
 public class MessageJpaAdapter implements MessageRepository {
     private final MessageJpaRepository messageJpaRepository;
     private final ChatRoomJpaRepository chatRoomJpaRepository;
+    private final MessageMapper mapper;
 
-    public MessageJpaAdapter(MessageJpaRepository messageJpaRepository, ChatRoomJpaRepository chatRoomJpaRepository) {
+    public MessageJpaAdapter(MessageJpaRepository messageJpaRepository, ChatRoomJpaRepository chatRoomJpaRepository, MessageMapper mapper) {
         this.messageJpaRepository = messageJpaRepository;
         this.chatRoomJpaRepository = chatRoomJpaRepository;
+        this.mapper = mapper;
     }
 
     @Override
-    public Message save(Message message) {
+    public MessageResponseDto save(Message message) {
         MessageJpaEntity messageJpaEntity = new MessageJpaEntity();
         messageJpaEntity.setId(UUID.randomUUID());
         messageJpaEntity.setContent(message.getContent());
@@ -32,20 +37,26 @@ public class MessageJpaAdapter implements MessageRepository {
         messageJpaEntity.setChatRoom(chatRoomJpaRepository
                 .findById(message.getChatRoomId())
                 .orElseThrow());
-        return toDomain(messageJpaRepository.save(messageJpaEntity));
+        Message save = toDomain(messageJpaRepository.save(messageJpaEntity));
+        return mapper.toDto(save);
     }
 
     @Override
-    public List<Message> findByChatRoomId(Long chatRoomId) {
+    public List<MessageResponseDto> findByChatRoomId(Long chatRoomId) {
         if (chatRoomId == null) {
             throw new IllegalArgumentException("Chat room id cannot be null");
         }
         return messageJpaRepository.findAll().stream()
                 .filter(message -> message.getChatRoom() != null && message.getChatRoom().getId().equals(chatRoomId) )
-                .map(this::toDomain)
+                .map((entity)-> {
+                    Message message = toDomain(entity);
+                    return mapper.toDto(message);
+                })
                 .collect(Collectors.toList());
     }
 
+
+    //este metodo puede realizarlo el mapstruct, pero lo especifique aca
     public Message toDomain(MessageJpaEntity entity){
         Long chatRoomId = entity.getChatRoom() != null ? entity.getChatRoom().getId() : null;
         return new Message(

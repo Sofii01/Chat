@@ -1,7 +1,8 @@
 package com.app.chat.domain.port.input;
 
 import com.app.chat.domain.model.Message;
+import com.app.chat.infrastructure.dtos.MessageResponseDto;
 
 public interface SendMessageUseCase {
-    Message sendMessage(Message message);
+    MessageResponseDto sendMessage(Message message);
 }

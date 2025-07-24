@@ -3,6 +3,7 @@ package com.app.chat.application.handler;
 import com.app.chat.application.command.GetMessagesCommand;
 import com.app.chat.domain.model.Message;
 import com.app.chat.domain.port.input.GetMessagesUseCase;
+import com.app.chat.infrastructure.dtos.MessageResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public class GetMessagesHandler {
     public GetMessagesHandler(GetMessagesUseCase getMessagesUseCase) {
         this.getMessagesUseCase = getMessagesUseCase;
     }
-    public List<Message> handle(GetMessagesCommand command) {
+    public List<MessageResponseDto> handle(GetMessagesCommand command) {
         return getMessagesUseCase.getMessages(command.getChatRoomId());
     }
 }
