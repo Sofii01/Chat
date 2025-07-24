@@ -5,6 +5,7 @@ import com.app.chat.application.command.SendMessageCommand;
 import com.app.chat.application.handler.GetMessagesHandler;
 import com.app.chat.application.handler.SendMessageHandler;
 import com.app.chat.domain.model.Message;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class MessageController {
         this.getMessagesHandler = getMessagesHandler;
     }
     @PostMapping("/send")
-    public ResponseEntity<Message> sendMessage(@RequestBody SendMessageCommand command) {
+    public ResponseEntity<Message> sendMessage(@Valid @RequestBody SendMessageCommand command) {
         Message message = sendMessageHandler.handle(command);
         return ResponseEntity.ok(message);
     }
