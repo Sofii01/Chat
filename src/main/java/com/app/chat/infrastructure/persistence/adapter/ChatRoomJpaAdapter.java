@@ -2,6 +2,7 @@ package com.app.chat.infrastructure.persistence.adapter;
 
 import com.app.chat.domain.model.ChatRoom;
 import com.app.chat.domain.port.output.ChatRoomRepository;
+import com.app.chat.infrastructure.config.exceptions.ChatRoomNotFoundException;
 import com.app.chat.infrastructure.dtos.ChatRoomResponseDto;
 import com.app.chat.infrastructure.persistence.entity.ChatRoomJpaEntity;
 import com.app.chat.infrastructure.persistence.mapper.ChatRoomMapper;
@@ -44,10 +45,10 @@ public class ChatRoomJpaAdapter implements ChatRoomRepository {
     @Override
     public Optional<ChatRoomResponseDto> getById(Long id) {
 
-        return jpaRepository.findById(id).map((entity) ->{
+        return Optional.of(jpaRepository.findById(id).map((entity) -> {
             ChatRoom chat = toDomain(entity);
             return mapper.toDto(chat);
-        });
+        }).orElseThrow(()-> new ChatRoomNotFoundException("Chat room not found with id: " + id)));
     }
 
     public ChatRoom toDomain(ChatRoomJpaEntity chatRoomJpa){
