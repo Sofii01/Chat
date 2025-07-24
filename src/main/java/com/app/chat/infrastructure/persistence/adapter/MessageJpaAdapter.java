@@ -3,6 +3,7 @@ package com.app.chat.infrastructure.persistence.adapter;
 import com.app.chat.domain.model.ChatRoom;
 import com.app.chat.domain.model.Message;
 import com.app.chat.domain.port.output.MessageRepository;
+import com.app.chat.infrastructure.config.exceptions.EmptyMessageException;
 import com.app.chat.infrastructure.dtos.MessageResponseDto;
 import com.app.chat.infrastructure.persistence.entity.MessageJpaEntity;
 import com.app.chat.infrastructure.persistence.mapper.MessageMapper;
@@ -29,6 +30,9 @@ public class MessageJpaAdapter implements MessageRepository {
 
     @Override
     public MessageResponseDto save(Message message) {
+        if (message.getContent() == null || message.getContent().trim().isEmpty()) {
+            throw new EmptyMessageException("Content cannot be empty");
+        }
         MessageJpaEntity messageJpaEntity = new MessageJpaEntity();
         messageJpaEntity.setId(UUID.randomUUID());
         messageJpaEntity.setContent(message.getContent());
