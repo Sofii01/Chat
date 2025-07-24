@@ -3,6 +3,7 @@ package com.app.chat.application.handler;
 import com.app.chat.application.command.SendMessageCommand;
 import com.app.chat.domain.model.Message;
 import com.app.chat.domain.port.input.SendMessageUseCase;
+import com.app.chat.infrastructure.dtos.MessageResponseDto;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ public class SendMessageHandler {
     public SendMessageHandler(SendMessageUseCase sendMessageUseCase) {
         this.sendMessageUseCase = sendMessageUseCase;
     }
-    public Message handle(SendMessageCommand command) {
+    public MessageResponseDto handle(SendMessageCommand command) {
         // validar datos antes
 
         Message message = Message.create(

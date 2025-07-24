@@ -2,7 +2,9 @@ package com.app.chat.infrastructure.persistence.adapter;
 
 import com.app.chat.domain.model.ChatRoom;
 import com.app.chat.domain.port.output.ChatRoomRepository;
+import com.app.chat.infrastructure.dtos.ChatRoomResponseDto;
 import com.app.chat.infrastructure.persistence.entity.ChatRoomJpaEntity;
+import com.app.chat.infrastructure.persistence.mapper.ChatRoomMapper;
 import com.app.chat.infrastructure.persistence.repository.ChatRoomJpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,27 +16,38 @@ import java.util.stream.Collectors;
 public class ChatRoomJpaAdapter implements ChatRoomRepository {
 
     private final ChatRoomJpaRepository jpaRepository;
+    private final ChatRoomMapper mapper;
 
-    public ChatRoomJpaAdapter(ChatRoomJpaRepository jpaRepository) {
+    public ChatRoomJpaAdapter(ChatRoomJpaRepository jpaRepository, ChatRoomMapper mapper) {
         this.jpaRepository = jpaRepository;
+        this.mapper = mapper;
     }
 
     @Override
-    public ChatRoom save(String chatRoom) {
+    public ChatRoomResponseDto save(String chatRoom) {
         ChatRoomJpaEntity chatRoomJpaEntity = new ChatRoomJpaEntity();
         chatRoomJpaEntity.setName(chatRoom);
-        return toDomain(jpaRepository.save(chatRoomJpaEntity));
+        ChatRoom save = toDomain(jpaRepository.save(chatRoomJpaEntity));
+        return mapper.toDto(save);
     }
 
     @Override
-    public List<ChatRoom> getAll() {
-        return jpaRepository.findAll().stream().map(this::toDomain).collect(Collectors.toList());
+    public List<ChatRoomResponseDto> getAll() {
+        return jpaRepository.findAll().stream()
+                .map(entity -> {
+                    ChatRoom chat = toDomain(entity);
+                    return mapper.toDto(chat);
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<ChatRoom> getById(Long id) {
+    public Optional<ChatRoomResponseDto> getById(Long id) {
 
-        return jpaRepository.findById(id).map(this::toDomain);
+        return jpaRepository.findById(id).map((entity) ->{
+            ChatRoom chat = toDomain(entity);
+            return mapper.toDto(chat);
+        });
     }
 
     public ChatRoom toDomain(ChatRoomJpaEntity chatRoomJpa){

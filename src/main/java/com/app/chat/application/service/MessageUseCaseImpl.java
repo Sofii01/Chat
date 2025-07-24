@@ -4,6 +4,7 @@ import com.app.chat.domain.model.Message;
 import com.app.chat.domain.port.input.GetMessagesUseCase;
 import com.app.chat.domain.port.input.SendMessageUseCase;
 import com.app.chat.domain.port.output.MessageRepository;
+import com.app.chat.infrastructure.dtos.MessageResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class MessageUseCaseImpl implements SendMessageUseCase, GetMessagesUseCas
     }
 
     @Override
-    public Message sendMessage(Message message) {
+    public MessageResponseDto sendMessage(Message message) {
         if(message.getContent() == null || message.getContent().trim().isEmpty()) {
             throw new IllegalArgumentException("Message content cannot be empty");
         }
@@ -26,7 +27,7 @@ public class MessageUseCaseImpl implements SendMessageUseCase, GetMessagesUseCas
     }
 
     @Override
-    public List<Message> getMessages(Long chatRoomId) {
+    public List<MessageResponseDto> getMessages(Long chatRoomId) {
         return messageRepository.findByChatRoomId(chatRoomId);
     }
 }

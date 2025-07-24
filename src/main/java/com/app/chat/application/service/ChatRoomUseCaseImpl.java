@@ -5,6 +5,7 @@ import com.app.chat.domain.port.input.CreateChatRoomUseCase;
 import com.app.chat.domain.port.input.GetAllChatRoomsUseCase;
 import com.app.chat.domain.port.input.GetChatRoomByIdUseCase;
 import com.app.chat.domain.port.output.ChatRoomRepository;
+import com.app.chat.infrastructure.dtos.ChatRoomResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,18 +22,18 @@ public class ChatRoomUseCaseImpl implements CreateChatRoomUseCase, GetAllChatRoo
 
 
     @Override
-    public ChatRoom createChatRoom(String chatRoom) {
+    public ChatRoomResponseDto createChatRoom(String chatRoom) {
         return chatRoomRepository.save(chatRoom);
     }
 
     @Override
-    public List<ChatRoom> getAll() {
+    public List<ChatRoomResponseDto> getAll() {
         return chatRoomRepository.getAll();
     }
 
     @Override
-    public Optional<ChatRoom> getById(Long id) {
-        Optional<ChatRoom> chatRoom = chatRoomRepository.getById(id);
+    public Optional<ChatRoomResponseDto> getById(Long id) {
+        Optional<ChatRoomResponseDto> chatRoom = chatRoomRepository.getById(id);
         return chatRoom;
     }
 }
