@@ -15,7 +15,7 @@ services:
     networks:
       - app-network
 
-  dashboard_ventas:
+  chat:
     build:
       context: .
       dockerfile: Dockerfile
